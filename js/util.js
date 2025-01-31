@@ -58,6 +58,6 @@ const switchDisabled = (collection, disabled) => {
       element.removeAttribute('disabled');
     }
   });
-}
+};
 
 export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension, switchDisabled };
