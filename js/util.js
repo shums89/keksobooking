@@ -50,4 +50,14 @@ const getRandomArrayElement = (arr) => arr[getRandomPositiveInteger(0, arr.lengt
 // eslint-disable-next-line no-nested-ternary
 const getDeclension = (n, titles) => titles[(n % 10 === 1 && n % 100 !== 11) ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2];
 
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension };
+const switchDisabled = (collection, disabled) => {
+  collection.forEach((element) => {
+    if (disabled) {
+      element.setAttribute('disabled', '');
+    } else {
+      element.removeAttribute('disabled');
+    }
+  });
+}
+
+export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension, switchDisabled };
