@@ -47,4 +47,7 @@ const getRandomPositiveFloat = (a, b, digits = 1) => {
 
 const getRandomArrayElement = (arr) => arr[getRandomPositiveInteger(0, arr.length - 1)];
 
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement };
+// eslint-disable-next-line no-nested-ternary
+const getDeclension = (n, titles) => titles[(n % 10 === 1 && n % 100 !== 11) ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2];
+
+export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension };

@@ -28,23 +28,28 @@ location, объект — местоположение в виде геогра
 const HOUSING = {
   bungalow: {
     'price-min': 0,
-    'price-max': 100000
+    'price-max': 100000,
+    'translate': 'Бунгало',
   },
   flat: {
     'price-min': 1000,
-    'price-max': 100000
+    'price-max': 100000,
+    'translate': 'Квартира',
   },
   hotel: {
     'price-min': 3000,
-    'price-max': 100000
+    'price-max': 100000,
+    'translate': 'Отель',
   },
   house: {
     'price-min': 5000,
-    'price-max': 100000
+    'price-max': 100000,
+    'translate': 'Дом',
   },
   palace: {
     'price-min': 10000,
-    'price-max': 100000
+    'price-max': 100000,
+    'translate': 'Дворец',
   },
 };
 
@@ -71,7 +76,7 @@ const createAnnouncement = (_, i) => {
       price: getRandomPositiveInteger(HOUSING[type]['price-min'], HOUSING[type]['price-max']),
       type,
       rooms: roomsCount,
-      guests: roomsCount === 100 ? 100 : getRandomPositiveInteger(1, roomsCount),
+      guests: roomsCount === 100 ? 0 : getRandomPositiveInteger(1, roomsCount),
       checkin: getRandomArrayElement(TIMES),
       checkout: getRandomArrayElement(TIMES),
       features: FEATURES.sort(() => Math.random() - 0.5).slice(0, getRandomPositiveInteger(1, FEATURES.length)),
@@ -84,7 +89,8 @@ const createAnnouncement = (_, i) => {
   return announcement;
 };
 
-const getAnnouncements = () => Array.from({ length: 10 }, createAnnouncement);
+const createAnnouncements = () => Array.from({ length: 10 }, createAnnouncement);
+const getHousing = () => HOUSING;
 
-export { getAnnouncements };
+export { createAnnouncements, getHousing };
 
