@@ -1,7 +1,8 @@
 import { getHousing } from './data.js';
-import { formatNumber, getDeclension } from './util.js';
+import { formatNumber, getDeclension, switchDisabled } from './util.js';
 
 const form = document.querySelector('.ad-form');
+const fieldsets = form.querySelectorAll('fieldset');
 const title = form.querySelector('#title');
 const typeHousing = form.querySelector('#type');
 const price = form.querySelector('#price');
@@ -95,9 +96,24 @@ const onChangeTime = (evt) => {
 
 //====================================================================
 
-form.addEventListener('submit', onSubmitForm);
-typeHousing.addEventListener('change', onChangeTypeHousing);
-roomNumber.addEventListener('change', onChangeRoomNumber);
-time.addEventListener('change', onChangeTime);
+const switchFormState = (active = true) => {
+  form.reset();
+  switchDisabled(fieldsets, !active);
 
+  if (active) {
+    form.classList.remove('ad-form--disabled');
+    form.addEventListener('submit', onSubmitForm);
+    typeHousing.addEventListener('change', onChangeTypeHousing);
+    roomNumber.addEventListener('change', onChangeRoomNumber);
+    time.addEventListener('change', onChangeTime);
+  } else {
+    form.classList.add('ad-form--disabled');
+    form.removeEventListener('submit', onSubmitForm);
+    typeHousing.removeEventListener('change', onChangeTypeHousing);
+    roomNumber.removeEventListener('change', onChangeRoomNumber);
+    time.removeEventListener('change', onChangeTime);
+  }
+};
+
+export { switchFormState };
 
