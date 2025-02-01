@@ -60,4 +60,6 @@ const switchDisabled = (collection, disabled) => {
   });
 };
 
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension, switchDisabled };
+const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);
+
+export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension, switchDisabled, formatNumber };
