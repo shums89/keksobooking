@@ -6,6 +6,7 @@ const fieldsets = form.querySelectorAll('fieldset');
 const title = form.querySelector('#title');
 const typeHousing = form.querySelector('#type');
 const price = form.querySelector('#price');
+const slider = form.querySelector('.ad-form__slider');
 const roomNumber = form.querySelector('#room_number');
 const capacity = form.querySelector('#capacity');
 const time = form.querySelector('.ad-form__element--time');
@@ -53,7 +54,40 @@ const onChangeTypeHousing = () => {
   price.min = newValue;
   price.placeholder = newValue;
   pristine.validate(price);
+
+  slider.noUiSlider.updateOptions({
+    range: {
+      min: getPriceExtremum('min'),
+      max: getPriceExtremum('max'),
+    },
+  });
 };
+
+noUiSlider.create(slider, {
+  range: {
+    min: getPriceExtremum('min'),
+    max: getPriceExtremum('max'),
+  },
+  start: 0,
+  step: 1,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      // if (Number.isInteger(value)) {
+      //   return value.toFixed(0);
+      // }
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+slider.noUiSlider.on('update', () => {
+  price.value = slider.noUiSlider.get();
+  pristine.validate(price);
+});
 
 //====================================================================
 
