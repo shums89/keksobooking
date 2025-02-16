@@ -132,6 +132,7 @@ const onChangeTime = (evt) => {
 const resetForm = () => {
   const MAP_INIT_VALUES = getMapInitValues();
 
+  pristine.reset();
   form.reset();
 
   address.value = `${MAP_INIT_VALUES.lat.toFixed(5)}, ${MAP_INIT_VALUES.lng.toFixed(5)}`;
@@ -150,8 +151,11 @@ const onResetForm = (evt) => {
 const onSubmitForm = (evt) => {
   evt.preventDefault();
   pristine.validate();
-  // отправка данных
-  resetForm();
+
+  if (form.checkValidity()) {
+    // отправка данных
+    resetForm();
+  }
 };
 
 //====================================================================
