@@ -62,4 +62,11 @@ const switchDisabled = (collection, disabled) => {
 
 const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);
 
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getDeclension, switchDisabled, formatNumber };
+export {
+  getRandomPositiveInteger,
+  getRandomPositiveFloat,
+  getRandomArrayElement,
+  getDeclension,
+  switchDisabled,
+  formatNumber,
+};

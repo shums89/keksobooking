@@ -1,4 +1,5 @@
-import { getHousing } from './data.js';
+import { getHousing, getMapInitValues } from './data.js';
+import { createMap, removeMap, switchMapState } from './map.js';
 import { formatNumber, getDeclension, switchDisabled } from './util.js';
 
 const form = document.querySelector('.ad-form');
@@ -7,9 +8,11 @@ const title = form.querySelector('#title');
 const typeHousing = form.querySelector('#type');
 const price = form.querySelector('#price');
 const slider = form.querySelector('.ad-form__slider');
+const address = form.querySelector('#address');
 const roomNumber = form.querySelector('#room_number');
 const capacity = form.querySelector('#capacity');
 const time = form.querySelector('.ad-form__element--time');
+const resetBtn = form.querySelector('.ad-form__reset');
 
 const HOUSING = getHousing();
 
@@ -23,11 +26,6 @@ const pristine = new Pristine(form, {
   errorTextTag: 'span',                       // Тег, который будет обрамлять текст ошибки
   errorTextClass: 'form__error'               // Класс для элемента с текстом ошибки
 });
-
-const onSubmitForm = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-};
 
 //====================================================================
 
@@ -60,6 +58,7 @@ const onChangeTypeHousing = () => {
       min: getPriceExtremum('min'),
       max: getPriceExtremum('max'),
     },
+    start: price.value ? price.value : newValue,
   });
 };
 
@@ -130,6 +129,33 @@ const onChangeTime = (evt) => {
 
 //====================================================================
 
+const resetForm = () => {
+  const MAP_INIT_VALUES = getMapInitValues();
+
+  form.reset();
+
+  address.value = `${MAP_INIT_VALUES.lat.toFixed(5)}, ${MAP_INIT_VALUES.lng.toFixed(5)}`;
+  price.min = 0;
+  price.placeholder = 0;
+  onChangeTypeHousing();
+  removeMap();
+  createMap();
+};
+
+const onResetForm = (evt) => {
+  evt.preventDefault();
+  resetForm();
+};
+
+const onSubmitForm = (evt) => {
+  evt.preventDefault();
+  pristine.validate();
+  // отправка данных
+  resetForm();
+};
+
+//====================================================================
+
 const switchFormState = (active = true) => {
   form.reset();
   switchDisabled(fieldsets, !active);
@@ -137,17 +163,21 @@ const switchFormState = (active = true) => {
   if (active) {
     form.classList.remove('ad-form--disabled');
     form.addEventListener('submit', onSubmitForm);
+    resetBtn.addEventListener('click', onResetForm);
     typeHousing.addEventListener('change', onChangeTypeHousing);
     roomNumber.addEventListener('change', onChangeRoomNumber);
     time.addEventListener('change', onChangeTime);
   } else {
     form.classList.add('ad-form--disabled');
     form.removeEventListener('submit', onSubmitForm);
+    resetBtn.removeEventListener('click', onResetForm);
     typeHousing.removeEventListener('change', onChangeTypeHousing);
     roomNumber.removeEventListener('change', onChangeRoomNumber);
     time.removeEventListener('change', onChangeTime);
   }
 };
 
-export { switchFormState };
+export {
+  switchFormState,
+};
 

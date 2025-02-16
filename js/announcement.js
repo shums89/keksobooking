@@ -74,4 +74,4 @@ const renderAnnouncements = (announcement) => {
   container.appendChild(cardListFragment);
 };
 
-export { renderAnnouncements };
+export { renderAnnouncements, createCardElement };

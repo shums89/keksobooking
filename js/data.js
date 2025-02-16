@@ -25,6 +25,12 @@ location, объект — местоположение в виде геогра
   lng, число с плавающей точкой — долгота, случайное значение от 139.70000 до 139.80000.
 */
 
+const MAP_INIT_VALUES = {
+  lat: 35.677760,
+  lng: 139.768971,
+  zoom: 12,
+};
+
 const HOUSING = {
   bungalow: {
     'price-min': 0,
@@ -91,6 +97,11 @@ const createAnnouncement = (_, i) => {
 
 const createAnnouncements = () => Array.from({ length: 10 }, createAnnouncement);
 const getHousing = () => HOUSING;
+const getMapInitValues = () => MAP_INIT_VALUES;
 
-export { createAnnouncements, getHousing };
+export {
+  createAnnouncements,
+  getHousing,
+  getMapInitValues
+};
 

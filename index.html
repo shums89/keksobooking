@@ -5,11 +5,13 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="nouislider/nouislider.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
-  <script src="pristine/pristine.min.js"></script>
-  <script src="nouislider/nouislider.js"></script>
+  <script src="pristine/pristine.min.js" defer></script>
+  <script src="nouislider/nouislider.js" defer></script>
+  <script src="leaflet/leaflet.js" defer></script>
   <script src="js/main.js" type="module"></script>
 </head>
 
@@ -97,7 +99,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text">
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
