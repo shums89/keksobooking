@@ -1,8 +1,6 @@
-import { getHousing } from './data.js';
+import { getHousing } from './consts.js';
+import { cardTemplate } from './elems.js';
 import { getDeclension } from './util.js';
-
-const container = document.querySelector('#map-canvas');
-const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 function getCapacity({ rooms, guests }) {
   let str = `${rooms} ${getDeclension(rooms, ['комната', 'комнаты', 'комнат'])} `;
@@ -14,7 +12,7 @@ function getCapacity({ rooms, guests }) {
   return str;
 }
 
-const createCardElement = ({ author, offer }) => {
+export const createCardElement = ({ author, offer }) => {
   const cardElement = cardTemplate.cloneNode(true);
   const features = cardElement.querySelector('.popup__features');
   const featureList = features.querySelectorAll('.popup__feature');
@@ -65,13 +63,3 @@ const createCardElement = ({ author, offer }) => {
 
   return cardElement;
 };
-
-const renderAnnouncements = (announcement) => {
-  const cardListFragment = document.createDocumentFragment();
-
-  cardListFragment.appendChild(createCardElement(announcement));
-
-  container.appendChild(cardListFragment);
-};
-
-export { renderAnnouncements, createCardElement };

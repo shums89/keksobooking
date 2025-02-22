@@ -1,18 +1,7 @@
-import { getHousing, getMapInitValues } from './data.js';
-import { createMap, removeMap, switchMapState } from './map.js';
+import { getHousing, getMapInitValues } from './consts.js';
+import { address, capacity, fieldsets, form, price, resetBtn, roomNumber, slider, time, title, typeHousing } from './elems.js';
+import { createMap, removeMap } from './map.js';
 import { formatNumber, getDeclension, switchDisabled } from './util.js';
-
-const form = document.querySelector('.ad-form');
-const fieldsets = form.querySelectorAll('fieldset');
-const title = form.querySelector('#title');
-const typeHousing = form.querySelector('#type');
-const price = form.querySelector('#price');
-const slider = form.querySelector('.ad-form__slider');
-const address = form.querySelector('#address');
-const roomNumber = form.querySelector('#room_number');
-const capacity = form.querySelector('#capacity');
-const time = form.querySelector('.ad-form__element--time');
-const resetBtn = form.querySelector('.ad-form__reset');
 
 const HOUSING = getHousing();
 
@@ -145,14 +134,16 @@ const resetForm = () => {
 
 const onResetForm = (evt) => {
   evt.preventDefault();
+
   resetForm();
 };
 
 const onSubmitForm = (evt) => {
   evt.preventDefault();
-  pristine.validate();
 
-  if (form.checkValidity()) {
+  const isValid = pristine.validate();
+
+  if (isValid) {
     // отправка данных
     resetForm();
   }

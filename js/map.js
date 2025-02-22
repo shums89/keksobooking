@@ -1,16 +1,12 @@
 import { createCardElement } from './announcement.js';
-import { createAnnouncements, getMapInitValues } from './data.js';
+import { getMapInitValues } from './consts.js';
+import { createAnnouncements } from './data.js';
+import { address, mapCanvas, mapFilterList, mapFilters } from './elems.js';
 import { switchFormState } from './form.js';
 import { switchDisabled } from './util.js';
 
-const mapContainer = document.querySelector('.map');
-const mapCanvas = mapContainer.querySelector('#map-canvas');
-const mapFilters = mapContainer.querySelector('.map__filters');
-const mapFilterList = mapFilters.querySelectorAll('[id^="housing-"]');
-const address = document.querySelector('#address');
-
-const MAP_INIT_VALUES = getMapInitValues();
 let map;
+const MAP_INIT_VALUES = getMapInitValues();
 
 const switchMapState = (active = true) => {
   mapFilters.reset();
