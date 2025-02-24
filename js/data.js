@@ -1,4 +1,4 @@
-import { getHousing } from './consts.js';
+import { ANNOUNCEMENT_COUNT, getHousing } from './consts.js';
 import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement } from './util.js';
 
 /*
@@ -28,7 +28,11 @@ location, объект — местоположение в виде геогра
 
 const TIMES = ['12:00', '13:00', '14:00'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const PHOTOS = ['img/photos/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'img/photos/claire-rendall-b6kAwr1i0Iw.jpg', 'img/photos/duonguyen-8LrGtIxxa4w.jpg'];
+const PHOTOS = [
+  'img/photos/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'img/photos/claire-rendall-b6kAwr1i0Iw.jpg',
+  'img/photos/duonguyen-8LrGtIxxa4w.jpg'
+];
 
 const HOUSING = getHousing();
 
@@ -64,4 +68,4 @@ const createAnnouncement = (_, i) => {
   return announcement;
 };
 
-export const createAnnouncements = () => Array.from({ length: 10 }, createAnnouncement);
+export const createAnnouncements = () => Array.from({ length: ANNOUNCEMENT_COUNT }, createAnnouncement);

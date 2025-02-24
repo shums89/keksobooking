@@ -1,7 +1,8 @@
-import { getHousing, getMapInitValues } from './consts.js';
+import { getData, sendData } from './api.js';
+import { ANNOUNCEMENT_COUNT, getHousing, getMapInitValues } from './consts.js';
 import { address, capacity, fieldsets, form, price, resetBtn, roomNumber, slider, time, title, typeHousing } from './elems.js';
-import { createMap, removeMap } from './map.js';
-import { formatNumber, getDeclension, switchDisabled } from './util.js';
+import { createMap, loadMockData, removeMap } from './map.js';
+import { formatNumber, getDeclension, showAlert, switchDisabled } from './util.js';
 
 const HOUSING = getHousing();
 
@@ -127,9 +128,13 @@ const resetForm = () => {
   address.value = `${MAP_INIT_VALUES.lat.toFixed(5)}, ${MAP_INIT_VALUES.lng.toFixed(5)}`;
   price.min = 0;
   price.placeholder = 0;
+
   onChangeTypeHousing();
   removeMap();
-  createMap();
+
+  getData((announcements) => {
+    createMap(announcements.slice(0, ANNOUNCEMENT_COUNT));
+  }, loadMockData);
 };
 
 const onResetForm = (evt) => {
@@ -144,8 +149,13 @@ const onSubmitForm = (evt) => {
   const isValid = pristine.validate();
 
   if (isValid) {
-    // отправка данных
-    resetForm();
+    sendData(
+      resetForm,
+      () => {
+        showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+      },
+      new FormData(evt.target),
+    );
   }
 };
 

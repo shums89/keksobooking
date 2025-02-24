@@ -1,9 +1,9 @@
 import { createCardElement } from './announcement.js';
-import { getMapInitValues } from './consts.js';
+import { ANNOUNCEMENT_COUNT, getMapInitValues } from './consts.js';
 import { createAnnouncements } from './data.js';
 import { address, mapCanvas, mapFilterList, mapFilters } from './elems.js';
 import { switchFormState } from './form.js';
-import { switchDisabled } from './util.js';
+import { showAlert, switchDisabled } from './util.js';
 
 let map;
 const MAP_INIT_VALUES = getMapInitValues();
@@ -80,9 +80,7 @@ const createMarkers = (announcements) => {
   });
 };
 
-const createMap = () => {
-  const announcements = createAnnouncements();
-
+const createMap = (announcements) => {
   map = L.map('map-canvas')
     .on('load', () => {
       switchMapState(true);
@@ -100,11 +98,19 @@ const createMap = () => {
   ).addTo(map);
 
   createMainMarker();
-  createMarkers(announcements);
+  createMarkers(announcements.slice(0, ANNOUNCEMENT_COUNT));
 };
 
 const removeMap = () => {
   map.remove();
 };
 
-export { switchMapState, createMap, removeMap };
+const loadMockData = () => {
+  const announcements = createAnnouncements();
+
+  createMap(announcements);
+
+  showAlert('Ошибка при загрузке данных. Будут использованы тестовые данные!');
+};
+
+export { switchMapState, createMap, removeMap, loadMockData };
