@@ -1,7 +1,7 @@
-import { getData, sendData } from './api.js';
-import { ANNOUNCEMENT_COUNT, getHousing, getMapInitValues } from './consts.js';
+import { sendData } from './api.js';
+import { getHousing, getMapInitValues } from './consts.js';
 import { address, capacity, fieldsets, form, price, resetBtn, roomNumber, slider, time, title, typeHousing } from './elems.js';
-import { createMap, loadMockData, removeMap } from './map.js';
+import { loadMap } from './map.js';
 import { showErrorMsg, showSuccessMsg } from './popup.js';
 import { formatNumber, getDeclension, switchDisabled } from './util.js';
 
@@ -131,11 +131,7 @@ const resetForm = () => {
   price.placeholder = 0;
 
   onChangeTypeHousing();
-  removeMap();
-
-  getData((announcements) => {
-    createMap(announcements.slice(0, ANNOUNCEMENT_COUNT));
-  }, loadMockData);
+  loadMap();
 };
 
 const onResetForm = (evt) => {

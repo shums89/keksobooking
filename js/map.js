@@ -1,11 +1,13 @@
 import { createCardElement } from './announcement.js';
-import { ANNOUNCEMENT_COUNT, getMapInitValues } from './consts.js';
+import { getData } from './api.js';
+import { ANNOUNCEMENT_COUNT, getMapInitValues, getPrice } from './consts.js';
 import { createAnnouncements } from './data.js';
 import { address, mapCanvas, mapFilterList, mapFilters } from './elems.js';
 import { switchFormState } from './form.js';
 import { showAlert, switchDisabled } from './util.js';
 
 let map;
+let markerGroup;
 const MAP_INIT_VALUES = getMapInitValues();
 
 const switchMapState = (active = true) => {
@@ -55,7 +57,7 @@ const createMarkers = (announcements) => {
     iconAnchor: [20, 40],
   });
 
-  const markerGroup = L.layerGroup().addTo(map);
+  markerGroup = L.layerGroup().addTo(map);
 
   const createMarker = (announcement) => {
     const { lat, lng } = announcement.location;
@@ -101,16 +103,75 @@ const createMap = (announcements) => {
   createMarkers(announcements.slice(0, ANNOUNCEMENT_COUNT));
 };
 
-const removeMap = () => {
-  map.remove();
+const updateMarkers = (announcements) => {
+  mapFilters.addEventListener('change', (evt) => {
+    const target = evt.target;
+    let newAnnouncement = announcements.slice();
+
+    mapFilterList.forEach((fieldset) => {
+      if (fieldset.value !== 'any') {
+        if (fieldset.matches('#housing-type')) {
+          newAnnouncement = newAnnouncement
+            .filter((el) => el.offer.type === fieldset.value);
+        }
+
+        if (fieldset.matches('#housing-price')) {
+          const PRICE = getPrice();
+
+          newAnnouncement = newAnnouncement
+            .filter((el) => el.offer.price >= PRICE[fieldset.value].min && el.offer.price <= PRICE[fieldset.value].max);
+        }
+
+        if (fieldset.matches('#housing-rooms')) {
+          newAnnouncement = newAnnouncement
+            .filter((el) => +el.offer.rooms === +fieldset.value);
+        }
+
+        if (fieldset.matches('#housing-guests')) {
+          newAnnouncement = newAnnouncement
+            .filter((el) => +el.offer.guests === +fieldset.value);
+        }
+
+        if (fieldset.matches('#housing-features')) {
+          const inputs = fieldset.querySelectorAll('input');
+
+          inputs.forEach((input) => {
+            if (input.checked) {
+              newAnnouncement = newAnnouncement
+                .filter((el) => el.offer.features?.includes(input.value));
+            }
+          });
+        }
+      }
+    });
+
+    markerGroup.clearLayers();
+    createMarkers(newAnnouncement.slice(0, ANNOUNCEMENT_COUNT));
+  });
 };
 
-const loadMockData = () => {
-  const announcements = createAnnouncements();
+const loadMap = () => {
+  map?.remove();
 
-  createMap(announcements);
+  getData(
+    (announcements) => {
+      createMap(announcements);
+      updateMarkers(announcements);
+    },
+    () => {
+      const announcements = createAnnouncements();
 
-  showAlert('Ошибка при загрузке данных. Будут использованы тестовые данные!');
+      createMap(announcements);
+      updateMarkers(announcements);
+
+      showAlert('Ошибка при загрузке данных. Будут использованы тестовые данные!');
+    }
+  );
 };
 
-export { switchMapState, createMap, removeMap, loadMockData };
+export {
+  switchMapState,
+  createMap,
+  updateMarkers,
+  loadMap,
+};
