@@ -10,6 +10,13 @@ let map;
 let markerGroup;
 const MAP_INIT_VALUES = getMapInitValues();
 
+const compareFeatures = (featuresA, featuresB) => {
+  const rankA = featuresA.offer.features?.length || 0;
+  const rankB = featuresB.offer.features?.length || 0;
+
+  return rankB - rankA;
+}
+
 const switchMapState = (active = true) => {
   mapFilters.reset();
   switchDisabled(mapFilterList, !active);
@@ -100,7 +107,12 @@ const createMap = (announcements) => {
   ).addTo(map);
 
   createMainMarker();
-  createMarkers(announcements.slice(0, ANNOUNCEMENT_COUNT));
+  createMarkers(
+    announcements
+      .slice()
+      .sort(compareFeatures)
+      .slice(0, ANNOUNCEMENT_COUNT)
+  );
 };
 
 const updateMarkers = (announcements) => {
@@ -146,7 +158,12 @@ const updateMarkers = (announcements) => {
     });
 
     markerGroup.clearLayers();
-    createMarkers(newAnnouncement.slice(0, ANNOUNCEMENT_COUNT));
+    createMarkers(
+      newAnnouncement
+        .slice()
+        .sort(compareFeatures)
+        .slice(0, ANNOUNCEMENT_COUNT)
+    );
   });
 };
 
