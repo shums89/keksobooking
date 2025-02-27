@@ -16,3 +16,5 @@ export const time = form.querySelector('.ad-form__element--time');
 export const resetBtn = form.querySelector('.ad-form__reset');
 
 export const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
+export const successTemplate = document.querySelector('#success').content.querySelector('.success');
+export const errorTemplate = document.querySelector('#error').content.querySelector('.error');

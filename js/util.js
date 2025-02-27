@@ -62,6 +62,8 @@ const switchDisabled = (collection, disabled) => {
 
 const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
@@ -90,5 +92,6 @@ export {
   getDeclension,
   switchDisabled,
   formatNumber,
+  isEscapeKey,
   showAlert,
 };

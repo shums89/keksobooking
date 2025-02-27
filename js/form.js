@@ -2,7 +2,8 @@ import { getData, sendData } from './api.js';
 import { ANNOUNCEMENT_COUNT, getHousing, getMapInitValues } from './consts.js';
 import { address, capacity, fieldsets, form, price, resetBtn, roomNumber, slider, time, title, typeHousing } from './elems.js';
 import { createMap, loadMockData, removeMap } from './map.js';
-import { formatNumber, getDeclension, showAlert, switchDisabled } from './util.js';
+import { showErrorMsg, showSuccessMsg } from './popup.js';
+import { formatNumber, getDeclension, switchDisabled } from './util.js';
 
 const HOUSING = getHousing();
 
@@ -150,10 +151,11 @@ const onSubmitForm = (evt) => {
 
   if (isValid) {
     sendData(
-      resetForm,
       () => {
-        showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+        showSuccessMsg();
+        resetForm();
       },
+      showErrorMsg,
       new FormData(evt.target),
     );
   }
