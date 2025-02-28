@@ -1,6 +1,7 @@
 export const URL_GET = 'https://25.javascript.htmlacademy.pro/keksobooking/data';
 export const URL_POST = 'https://25.javascript.htmlacademy.pro/keksobooking';
 export const ANNOUNCEMENT_COUNT = 10;
+export const RERENDER_DELAY = 500;
 
 export const getMapInitValues = () => {
   const MAP_INIT_VALUES = {

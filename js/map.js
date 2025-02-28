@@ -1,10 +1,10 @@
 import { createCardElement } from './announcement.js';
 import { getData } from './api.js';
-import { ANNOUNCEMENT_COUNT, getMapInitValues, getPrice } from './consts.js';
+import { ANNOUNCEMENT_COUNT, getMapInitValues, getPrice, RERENDER_DELAY } from './consts.js';
 import { createAnnouncements } from './data.js';
 import { address, mapCanvas, mapFilterList, mapFilters } from './elems.js';
 import { switchFormState } from './form.js';
-import { showAlert, switchDisabled } from './util.js';
+import { debounce, showAlert, switchDisabled } from './util.js';
 
 let map;
 let markerGroup;
@@ -89,6 +89,19 @@ const createMarkers = (announcements) => {
   });
 };
 
+const renderMarkers = (announcements) => {
+  markerGroup?.clearLayers();
+
+  createMarkers(
+    announcements
+      .slice()
+      .sort(compareFeatures)
+      .slice(0, ANNOUNCEMENT_COUNT)
+  );
+};
+
+const debouncedRender = debounce(renderMarkers, RERENDER_DELAY);
+
 const createMap = (announcements) => {
   map = L.map('map-canvas')
     .on('load', () => {
@@ -107,40 +120,34 @@ const createMap = (announcements) => {
   ).addTo(map);
 
   createMainMarker();
-  createMarkers(
-    announcements
-      .slice()
-      .sort(compareFeatures)
-      .slice(0, ANNOUNCEMENT_COUNT)
-  );
+  renderMarkers(announcements);
 };
 
 const updateMarkers = (announcements) => {
-  mapFilters.addEventListener('change', (evt) => {
-    const target = evt.target;
-    let newAnnouncement = announcements.slice();
+  mapFilters.addEventListener('change', () => {
+    let filteredAnnouncements = announcements.slice();
 
     mapFilterList.forEach((fieldset) => {
       if (fieldset.value !== 'any') {
         if (fieldset.matches('#housing-type')) {
-          newAnnouncement = newAnnouncement
+          filteredAnnouncements = filteredAnnouncements
             .filter((el) => el.offer.type === fieldset.value);
         }
 
         if (fieldset.matches('#housing-price')) {
           const PRICE = getPrice();
 
-          newAnnouncement = newAnnouncement
+          filteredAnnouncements = filteredAnnouncements
             .filter((el) => el.offer.price >= PRICE[fieldset.value].min && el.offer.price <= PRICE[fieldset.value].max);
         }
 
         if (fieldset.matches('#housing-rooms')) {
-          newAnnouncement = newAnnouncement
+          filteredAnnouncements = filteredAnnouncements
             .filter((el) => +el.offer.rooms === +fieldset.value);
         }
 
         if (fieldset.matches('#housing-guests')) {
-          newAnnouncement = newAnnouncement
+          filteredAnnouncements = filteredAnnouncements
             .filter((el) => +el.offer.guests === +fieldset.value);
         }
 
@@ -149,7 +156,7 @@ const updateMarkers = (announcements) => {
 
           inputs.forEach((input) => {
             if (input.checked) {
-              newAnnouncement = newAnnouncement
+              filteredAnnouncements = filteredAnnouncements
                 .filter((el) => el.offer.features?.includes(input.value));
             }
           });
@@ -157,13 +164,7 @@ const updateMarkers = (announcements) => {
       }
     });
 
-    markerGroup.clearLayers();
-    createMarkers(
-      newAnnouncement
-        .slice()
-        .sort(compareFeatures)
-        .slice(0, ANNOUNCEMENT_COUNT)
-    );
+    debouncedRender(filteredAnnouncements);
   });
 };
 
@@ -189,6 +190,5 @@ const loadMap = () => {
 export {
   switchMapState,
   createMap,
-  updateMarkers,
   loadMap,
 };
