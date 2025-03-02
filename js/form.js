@@ -3,6 +3,7 @@ import { getHousing, getMapInitValues } from './consts.js';
 import { address, capacity, fieldsets, form, price, resetBtn, roomNumber, slider, time, title, typeHousing } from './elems.js';
 import { loadMap } from './map.js';
 import { showErrorMsg, showSuccessMsg } from './popup.js';
+import { deleteImages } from './preview.js';
 import { formatNumber, getDeclension, switchDisabled } from './util.js';
 
 const HOUSING = getHousing();
@@ -131,6 +132,7 @@ const resetForm = () => {
   price.placeholder = 0;
 
   onChangeTypeHousing();
+  deleteImages();
   loadMap();
 };
 
@@ -146,12 +148,21 @@ const onSubmitForm = (evt) => {
   const isValid = pristine.validate();
 
   if (isValid) {
+    const submitBtn = form.querySelector('.ad-form__submit');
+
+    submitBtn.textContent = 'Публикация...';
+    form.classList.add('ad-form--disabled');
+
     sendData(
       () => {
         showSuccessMsg();
         resetForm();
       },
       showErrorMsg,
+      () => {
+        submitBtn.textContent = 'Опубликовать';
+        form.classList.remove('ad-form--disabled');
+      },
       new FormData(evt.target),
     );
   }

@@ -68,4 +68,4 @@ const createAnnouncement = (_, i) => {
   return announcement;
 };
 
-export const createAnnouncements = () => Array.from({ length: ANNOUNCEMENT_COUNT }, createAnnouncement);
+export const createAnnouncements = () => Array.from({ length: ANNOUNCEMENT_COUNT * 2 }, createAnnouncement);
